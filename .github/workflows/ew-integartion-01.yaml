@@ -5,8 +5,8 @@ on:
     types: [opened, reopened, synchronize]
     branches:
       - main
-    paths:
-      - "ansible-server/**"
+    # paths:
+    #   - "ansible-server/**"
 
 jobs:
   terraform-validate:
