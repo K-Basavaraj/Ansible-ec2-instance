@@ -7,15 +7,26 @@
 #       - main
 #     paths:
 #       - "ansible-server/**"
-# permissions:
-#   id-token: write
-#   contents: write
-#   pull-requests: write
 
 # jobs:
-#   validate:
-#     uses: K-Basavaraj/terraformworkspace/.github/workflows/rw-oidc-validate.yml@main
+#   terraform-validate:
+#     uses: K-Basavaraj/Ansible-ec2-instance/.github/workflows/rw-terraform-validate-01.yaml@main
 #     with:
 #       path: ansible-server
 #       tf_version: latest
 #     secrets:
+#       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+#   terraform-plan:
+#     uses: K-Basavaraj/Ansible-ec2-instance/.github/workflows/rw-terraform-plan-01.yaml@main
+#     needs: [terraform-validate]
+#     with:
+#       path: ansible-server
+#       key: ansible-server.tfstate
+#       bucket: remotes3-githubcicd
+#       region: us-east-1
+#       dynamodb_table: githubciddbtable
+#     secrets:
+#       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -35,6 +35,7 @@ jobs:
     environment: ${{ inputs.github_environment}}
     defaults:
       run:
+        shell: bash
         working-directory: ${{ inputs.path }}
 
     steps:
