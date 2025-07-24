@@ -1,0 +1,22 @@
+# vars/vars.yml
+
+# Python packages to install
+python_libraries:
+  - botocore
+  - boto3
+
+# EC2 instance configuration
+instance_type: "t3.micro"
+subnet_id: "subnet-xxxxxxxx"
+securitygroup_id: "sg-xxxxxxxx"
+ami_id: "ami-xxxxxxxx"
+instances:
+  - mysql
+  - backend
+  - frontend
+
+# Pip version to use
+pip_version: pip3.9
+
+# Output directory permissions
+output_dir_mode: "0755"

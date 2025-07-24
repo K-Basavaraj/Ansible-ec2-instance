@@ -1,0 +1,41 @@
+- name: create ec2-instance
+  hosts: localhost                    # target the local
+  connection: local                   # local execution (run task on control machine (no ssh))
+  vars_files:
+    - ../vars/vars.yml                # Load all variables from external vars file
+
+
+  tasks:
+    - name: ansible to install python reqierd lib 
+      ansible.builtin.pip:
+       name: "{{ pip_libraries }}"                # Use list of libraries from vars
+       executable: "{{ pip_version }}"
+
+    - name: create ec2-instance
+      amazon.aws.ec2_instance:
+        name: "{{ item }}"                         # Name each EC2 instance (e.g., mysql, backend, frontend)
+        vpc_subnet_id: "{{ subnet_id }}"
+        instance_type: "{{ instance_type }}"
+        security_group: "{{ securitygroup_id }}"
+        image_id: "{{ ami_id }}"
+      loop: "{{ instances }}"
+      register: ec2_instances                       # Save the result for further use
+
+# Create output directory if it does not exist
+    - name: Ensure output directory exists
+      ansible.builtin.file:
+        path: "{{ output_dir }}"
+        state: directory
+        mode: "{{ output_dir_mode }}"                # Set permissions: This allows the owner full access, and read+execute for others
+    
+# Save instance details as a pretty JSON file for reuse (private IPs, public IPs, names, etc.) to a JSON file and This file can be read by another playbook (like a Route53 playbook).
+    - name: Save instance details to JSON file
+      ansible.builtin.copy:
+        content: "{{ ec2_instances | to_nice_json }}" # Converts the registered EC2 instance details into human-readable (pretty-printed) JSON format
+        dest: "{{ output_dir }}/{{ output_file }}"
+
+# Print instance details for debugging/confirmation
+    - name: Show instance details
+      ansible.builtin.debug:
+        var: ec2_instances
+
