@@ -12,3 +12,4 @@ module "ansible-server" {
     Name = "workstation"
   }
 }
+

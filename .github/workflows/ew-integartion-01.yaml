@@ -23,6 +23,7 @@ jobs:
     needs: [terraform-validate]
     with:
       path: ansible-server
+      tf_version: latest
       key: ansible-server.tfstate
       bucket: remotes3-githubcicd
       region: us-east-1

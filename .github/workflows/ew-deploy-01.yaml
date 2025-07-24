@@ -14,6 +14,7 @@ jobs:
     uses: K-Basavaraj/Ansible-ec2-instance/.github/workflows/rw-terraform-plan-01.yaml@main
     with:
       path: ansible-server
+      tf_version: latest
       key: ansible-server.tfstate
       bucket: remotes3-githubcicd
       region: us-east-1
@@ -27,6 +28,7 @@ jobs:
     needs: [terraform-plan]
     with:
       path: ansible-server
+      tf_version: latest
       key: "ansible-server/terraform.tfstate"
       bucket: "your-bucket-name"
       region: "ap-south-1"

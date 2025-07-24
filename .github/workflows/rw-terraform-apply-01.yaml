@@ -22,6 +22,10 @@ on:
         description: 'specify the github environment'
         required: true
         type: string
+      tf_version:
+        description: "Specify the version of the terraform to use"
+        required: true
+        type: string
 
     secrets:
       AWS_ACCESS_KEY_ID:
