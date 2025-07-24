@@ -1,0 +1,91 @@
+name: "rw-terraform-plan-01"
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        description: "Specify the path of the root Terraform module"
+        required: true
+        type: string
+      tf_version:
+        description: "Specify the version of the terraform to use"
+        required: true
+        type: string
+      bucket:
+        description: "S3 bucket for Terraform state"
+        required: true
+        type: string
+      key:
+        description: "Terraform state file key"
+        required: true
+        type: string
+      region:
+        description: "AWS region for backend"
+        required: true
+        type: string
+      dynamodb_table:
+        description: "DynamoDB table for state locking"
+        required: true
+        type: string
+
+      # tf_vars_file:
+      #   description: "Terraform .tfvars file to use"
+      #   required: true
+      #   type: string
+
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{inputs.path}}
+    permissions:
+      id-token: write #permission grants the GitHub Actions workflow the capability to request an OIDC token from GitHub. This token is used for authentication with external services.
+      contents: write
+      pull-requests: write
+      issues: write
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.tf_version }}
+      
+      - name: Terraform Init with AWS S3 Backend
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ inputs.bucket }}" \
+            -backend-config="key=${{ inputs.key }}" \
+            -backend-config="region=${{ inputs.region }}" \
+            -backend-config="dynamodb_table=${{ inputs.dynamodb_table }}"
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=plan.tfplan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: Terraform plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+      
+      - name: upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ inputs.key }}"
+          path: "${{inputs.path}}/plan.tfplan"
+          retention-days: 5
