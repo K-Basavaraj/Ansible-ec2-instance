@@ -27,10 +27,10 @@ on:
         description: "DynamoDB table for state locking"
         required: true
         type: string
-      github_environment:
-        description: 'specify the github environment'
-        required: true
-        type: string
+      # github_environment:
+      #   description: 'specify the github environment'
+      #   required: true
+      #   type: string
 
     secrets:
       AWS_ACCESS_KEY_ID:
