@@ -18,6 +18,11 @@ on:
       dynamodb_table:
         required: true
         type: string
+      github_environment:
+        description: 'specify the github environment'
+        required: true
+        type: string
+
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -27,6 +32,7 @@ on:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.github_environment}}
     defaults:
       run:
         working-directory: ${{ inputs.path }}

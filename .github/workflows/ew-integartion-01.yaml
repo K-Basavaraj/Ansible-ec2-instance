@@ -16,6 +16,6 @@
 #   validate:
 #     uses: K-Basavaraj/terraformworkspace/.github/workflows/rw-oidc-validate.yml@main
 #     with:
-#       path: terraform_dev
+#       path: ansible-server
 #       tf_version: latest
 #     secrets:
