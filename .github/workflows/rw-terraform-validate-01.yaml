@@ -18,14 +18,13 @@ on:
         AWS_SECRET_ACCESS_KEY:
           required: true
 jobs:
-  validate:
+  terraform-validate:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
         working-directory: ${{ inputs.path }}
     permissions:
-      id-token: write
       contents: write
       pull-requests: write
    
