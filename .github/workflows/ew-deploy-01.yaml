@@ -4,8 +4,8 @@ on:
  push:
    branches:
     - main
-   paths:
-   - "ansible-server/**"
+#    paths:
+#    - "ansible-server/**"
  
  workflow_dispatch:
 
@@ -33,7 +33,7 @@ jobs:
       bucket: "your-bucket-name"
       region: "ap-south-1"
       dynamodb_table: "your-lock-table"
-      github_environment: auth-Apply
+      github_environment: auth-Apply # environment protected with manual approval
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
