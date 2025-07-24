@@ -5,7 +5,7 @@ on:
    branches:
     - main
    paths:
-   - "terraform_dev/**"
+   - "ansible-server/**"
  
  workflow_dispatch:
 
