@@ -23,7 +23,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   approve-and-apply:
-    uses: .github/workflows/rw-terraform-apply-01.yml@main
+    uses: K-Basavaraj/Ansible-ec2-instance/.github/workflows/rw-terraform-apply-01.yml@main
     needs: [terraform-plan]
     with:
       path: ansible-server
