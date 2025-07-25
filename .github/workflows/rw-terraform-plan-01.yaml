@@ -83,6 +83,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plan-artifact
-          path: ${{ inputs.path }}/plan.tfplan
+          path: "${{ inputs.path }}/plan.tfplan"
           retention-days: 5
       
