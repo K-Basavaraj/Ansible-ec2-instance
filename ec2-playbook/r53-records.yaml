@@ -1,0 +1,36 @@
+ #private IP R53 mysql
+- name: create route53 record
+  host: localhost 
+  connection: local
+  tasks: 
+   - name: Load EC2 instance data from JSON file
+     ansible.builtin.include_vars:
+     file: "/tmp/my-output-dir/ec2_instance_details.json"
+     name: ec2_instances
+
+   - name: create route53 records mysql
+     amazon.aws.route53:
+       state: present 
+       zone: "{{ zone }}"
+       record: "{{ item.item }}.{{ zone }}" 
+       type: A 
+       ttl: 1 
+       value: "{{ item.instances[0].private_ip_address }}"  
+       wait: true
+       overwrite: true
+     loop: "{{ ec2_instances.results }}" 
+
+   - name: create reoute53 record for frontend 
+     amazon.aws.route53:
+      state: present 
+      zone: "{{ zone }}"  
+      record: "{{ zone }}"
+      type: A 
+      ttl: 1 
+      value: "{{ item.instances[0].public_ip_address }}"  
+      wait: true
+      overwrite: true
+     loop: "{{ ec2_instances.results }}" 
+     when: item.item == "frontend" 
+
+
