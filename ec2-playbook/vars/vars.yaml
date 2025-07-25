@@ -19,4 +19,6 @@ instances:
 pip_version: pip3.9
 
 # Output directory permissions
+output_dir: /tmp/my-output-dir     
 output_dir_mode: "0755"
+output_file: ec2_instance_details.json
