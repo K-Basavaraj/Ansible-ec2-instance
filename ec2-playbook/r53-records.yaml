@@ -1,12 +1,12 @@
  #private IP R53 mysql
 - name: create route53 record
-  host: localhost 
+  hosts: localhost 
   connection: local
   tasks: 
    - name: Load EC2 instance data from JSON file
      ansible.builtin.include_vars:
-     file: "/tmp/my-output-dir/ec2_instance_details.json"
-     name: ec2_instances
+       file: "/tmp/my-output-dir/ec2_instance_details.json"
+       name: ec2_instances
 
    - name: create route53 records mysql
      amazon.aws.route53:
