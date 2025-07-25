@@ -2,7 +2,7 @@
   hosts: localhost                    # target the local
   connection: local                   # local execution (run task on control machine (no ssh))
   vars_files:
-    - /vars/vars.yaml                # Load all variables from external vars file
+    - vars/vars.yaml                # Load all variables from external vars file
 
 
   tasks:
