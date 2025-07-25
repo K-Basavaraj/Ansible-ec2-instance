@@ -8,7 +8,7 @@
   tasks:
     - name: ansible to install python reqierd lib 
       ansible.builtin.pip:
-       name: "{{ pip_libraries }}"                # Use list of libraries from vars
+       name: "{{ python_libraries }}"                # Use list of libraries from vars
        executable: "{{ pip_version }}"
 
     - name: create ec2-instance
