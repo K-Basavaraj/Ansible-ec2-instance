@@ -29,10 +29,10 @@ jobs:
     with:
       path: ansible-server
       tf_version: latest
-      key: "ansible-server/terraform.tfstate"
-      bucket: "your-bucket-name"
-      region: "ap-south-1"
-      dynamodb_table: "your-lock-table"
+      key: ansible-server.tfstate
+      bucket: remotes3-githubcicd
+      region: us-east-1
+      dynamodb_table: githubciddbtable
       github_environment: auth-Apply # environment protected with manual approval
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
