@@ -10,9 +10,10 @@
        file: "/tmp/my-output-dir/ec2_instance_details.json"
        name: ec2_instances
 
-   - name: create route53 records mysql
+   - name: create route53 records # for mysql,backend,andfrontend instace with privateip
      amazon.aws.route53:
-       state: present 
+      # state: present # when you want create uncomment this and comment below one 
+       state: absent
        zone: "{{ zone }}"
        record: "{{ item.item }}.{{ zone }}" 
        type: A 
@@ -24,7 +25,8 @@
 
    - name: create reoute53 record for frontend 
      amazon.aws.route53:
-      state: present 
+      # state: present # when you want create uncomment this and comment below one 
+      state: absent
       zone: "{{ zone }}"  
       record: "{{ zone }}"
       type: A 
