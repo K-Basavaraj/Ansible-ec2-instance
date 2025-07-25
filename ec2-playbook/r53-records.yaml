@@ -2,6 +2,8 @@
 - name: create route53 record
   hosts: localhost 
   connection: local
+  vars_files:
+    - vars/vars.yaml 
   tasks: 
    - name: Load EC2 instance data from JSON file
      ansible.builtin.include_vars:
