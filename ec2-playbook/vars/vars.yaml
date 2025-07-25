@@ -7,9 +7,9 @@ python_libraries:
 
 # EC2 instance configuration
 instance_type: "t3.micro"
-subnet_id: "subnet-xxxxxxxx"
-securitygroup_id: "sg-xxxxxxxx"
-ami_id: "ami-xxxxxxxx"
+subnet_id: "subnet-0bad68f7e9d3b3c08"
+securitygroup_id: "sg-06379eec176b454ce"
+ami_id: "ami-09c813fb71547fc4f"
 instances:
   - mysql
   - backend
