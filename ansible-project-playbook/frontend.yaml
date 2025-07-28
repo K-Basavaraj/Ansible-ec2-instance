@@ -5,14 +5,14 @@
   tasks:
     - name: install nginx server
       ansible.builtin.package:
-        - name: nginx
-          state: present
+        name: nginx
+        state: present
 
     - name: start service
       ansible.builtin.service:
-        - name: nginx
-          state: started
-          enabled: true
+        name: nginx
+        state: started
+        enabled: true
 
     - name: remove default content that web server is serving.
       ansible.builtin.file:
