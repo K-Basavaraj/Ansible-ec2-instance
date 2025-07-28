@@ -5,6 +5,11 @@
     - vars/vars.yaml
   
   tasks:
+    - name: ansible to install python reqierd lib
+      ansible.builtin.pip:
+        name: "{{ python_libraries }}" # Use list of libraries from vars
+        executable: "{{ pip_version }}"
+        
     - name: install mysql server
       ansible.builtin.package:
         name: mysql-server
@@ -24,10 +29,6 @@
       register: mysql_info
 
     #previous task get error due to requierd lib here is the task to install it
-    - name: ansible to install python reqierd lib
-      ansible.builtin.pip:
-        name: "{{ python_libraries }}" # Use list of libraries from vars
-        executable: "{{ pip_version }}"
     
     - name: print mysql info 
       ansible.builtin.debug:
