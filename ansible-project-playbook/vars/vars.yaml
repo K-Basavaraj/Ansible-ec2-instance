@@ -8,3 +8,9 @@ pip_version: pip3.9
 python_libraries:
  - PyMySQL
  - cryptography
+
+#backendvars
+packages_to_install:
+    - { name: "nodejs", state: "present" }
+    - { name: "npm", state: "present" }
+    - { name: "mysql", state: "present" }

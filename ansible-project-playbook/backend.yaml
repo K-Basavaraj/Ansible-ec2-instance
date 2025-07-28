@@ -1,0 +1,68 @@
+- name: configure backend server
+  hosts: backend
+  become: yes
+  vars_files:
+    - vars/vars.yaml
+  tasks:
+    - name: ansible to install python reqierd lib for import from backend to mysql
+      ansible.builtin.pip:
+        name: "{{ python_libraries }}" # Use list of libraries from vars
+        executable: "{{ pip_version }}"
+
+    - name: disable defult nodejs
+      ansible.builtin.command: dnf module disable nodejs -y
+
+    - name: enable nodejs 20
+      ansible.builtin.command: dnf module enable nodejs:20 -y
+
+    - name: install nodejs
+      ansible.builtin.package:
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"
+      loop: "{{ packages_to_install }}"
+       
+
+    - name: add expense user
+      ansible.builtin.user:
+        name: expense
+
+    - name: Create a app folder
+      ansible.builtin.file:
+        path: /app
+        state: directory
+
+    - name: Download file with custom HTTP headers
+      ansible.builtin.get_url:
+        url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        dest: /tmp/backend.zip
+
+    - name: extract the code
+      ansible.builtin.unarchive:
+        src: /tmp/backend.zip #by defult ansible thinks this is in ansible server
+        dest: /app
+        remote_src: yes #its like no need to move, already this derictory exist in the remote.
+
+    - name: install the dependencies
+      ansible.builtin.command: npm install
+      args:
+        chdir: /app #somedir/#Change the working directory to somedir/ and run the command as db_owner if /path/to/database does not exist
+
+    - name: copy backend service file
+      ansible.builtin.copy:
+        src: backend.service
+        dest: /etc/systemd/system/backend.service
+
+    - name: import the mysql data
+      community.mysql.mysql_db:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        login_host: "{{ login_host }}"
+        name: all #name=all may only be provided if state is dump or import.
+        state: import
+        target: /app/schema/backend.sql
+    
+    - name: demon reload and start
+      ansible.builtin.systemd_service:
+        state: restarted
+        daemon_reload: true
+        name: backend
