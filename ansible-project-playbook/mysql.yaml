@@ -9,7 +9,7 @@
       ansible.builtin.pip:
         name: "{{ python_libraries }}" # Use list of libraries from vars
         executable: "{{ pip_version }}"
-        
+
     - name: install mysql server
       ansible.builtin.package:
         name: mysql-server
@@ -26,9 +26,8 @@
         login_user: root
         login_password: "{{ mysql_root_password }}"
         login_host: "{{ login_host }}"
+      ignore_erros: true
       register: mysql_info
-
-    #previous task get error due to requierd lib here is the task to install it
     
     - name: print mysql info 
       ansible.builtin.debug:
