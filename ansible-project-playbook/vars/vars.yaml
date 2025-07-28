@@ -1,0 +1,10 @@
+# mysqlvars
+mysql_root_password: ExpenseApp@1
+login_host: mysql.basavadevops81s.online
+
+
+# Python packages to install and its version to use 
+pip_version: pip3.9
+python_libraries:
+ - PyMySQL
+ - cryptography

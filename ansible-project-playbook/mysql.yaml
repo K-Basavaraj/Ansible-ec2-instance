@@ -1,8 +1,37 @@
 - name: mysql database configuartion
   hosts: mysql
-  become: yes 
-  tasks: 
+  become: yes
+  vars_files:
+    - vars/vars.yaml
+  tasks:
     - name: install mysql server
-      ansible.builtin.package: 
+      ansible.builtin.package:
         name: mysql-server
-        state: present 
+        state: present
+
+    - name: start the service
+      ansible.builtin.service:
+        name: mysqld
+        status: started
+        enabled: yes
+
+    - name: connect mysql server
+      community.mysql.mysql_info:
+        login_user: root
+        login_password: { { mysql_root_password } }
+        login_host: { { login_host } }
+      register: mysql_info
+
+    #previous task get error due to requierd lib here is the task to install it
+    - name: ansible to install python reqierd lib
+      ansible.builtin.pip:
+        name: "{{ python_libraries }}" # Use list of libraries from vars
+        executable: "{{ pip_version }}"
+    
+    - name: print mysql info 
+      ansible.builtin.debug:
+       msg: "{{ mysql_info }}"
+
+    - name: setup root password
+      ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ mysql_root_password }}"
+      when: mysql_info.failed is true  #here its boolen so used "is" if its string we can use "="
